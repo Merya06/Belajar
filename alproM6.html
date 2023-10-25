@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fetch Data</title>
+  <style>
+    /* Gaya untuk elemen-elemen halaman */
+    body {
+      font-family: 'garamond';
+      background-color:  #9ae5e5;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    label {
+      font-size: 18px;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    #container {
+      text-align: center;
+      max-width: 1200px;
+      background-color: none;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    button {
+      font-family: 'garamond';
+      background-color: #6c839b;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #424950;
+    }
+
+    #table-container {
+      display: none;
+      margin-top: 20px;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 50px;
+      background-color: none;
+      border: 1px solid #9ae5e5;
+      border-radius: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #000000;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #d8e3ac;
+    }
+  </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Fetch Data from URL</h1>
+        <label for="url">Insert URL:</label>
+        <input type="text" id="url" placeholder="URL">
+        <br>
+        <button onclick="fetchData()">Load Data</button>
+        <div id="table-container">
+          <h2>Data from URL:</h2>
+          <table id="data-table">
+          </table>
+        </div>
+      </div>
+
+  <script>
+    function fetchData() {
+      // Mengambil nilai yang dimasukkan oleh pengguna dari elemen input dengan id "url".
+      const urlInput = document.getElementById('url').value;
+      // Mendapatkan elemen "table-container" dan "data-table" untuk menampilkan data tabel.
+      const tableContainer = document.getElementById('table-container');
+      const dataTable = document.getElementById('data-table');
+
+      // Membuat objek XMLHttpRequest untuk mengambil data dari URL yang dimasukkan.
+      const xhr = new XMLHttpRequest();
+      
+      // Menetapkan fungsi yang akan dijalankan saat status permintaan HTTP berubah.
+      xhr.onreadystatechange = function() {
+        // Memeriksa apakah permintaan HTTP telah selesai dengan status 200 (OK).
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // Mengurai data JSON yang diterima dari permintaan HTTP.
+          const data = JSON.parse(xhr.responseText);
+
+          // Mengosongkan isi elemen tabel.
+          dataTable.innerHTML = '';
+
+          // Membuat baris judul kolom.
+          const headerRow = document.createElement('tr');
+          for (const key in data[0]) {
+            if (data[0].hasOwnProperty(key)) {
+              // Membuat elemen sel judul kolom.
+              const headerCell = document.createElement('th');
+              // Mengatur teks dalam sel judul kolom sesuai dengan kunci (nama kolom).
+              headerCell.textContent = key;
+              // Menambahkan sel judul kolom ke dalam baris judul kolom.
+              headerRow.appendChild(headerCell);
+            }
+          }
+          // Menambahkan baris judul kolom ke dalam tabel.
+          dataTable.appendChild(headerRow);
+
+          // Loop melalui setiap item (baris data) dalam objek data.
+          data.forEach(function(item) {
+            // Membuat elemen baris data.
+            const dataRow = document.createElement('tr');
+            for (const key in item) {
+              if (item.hasOwnProperty(key)) {
+                // Membuat elemen sel data.
+                const dataCell = document.createElement('td');
+                // Mengatur teks dalam sel data sesuai dengan nilai data yang sesuai dengan kolom.
+                dataCell.textContent = item[key];
+                // Menambahkan sel data ke dalam baris data.
+                dataRow.appendChild(dataCell);
+              }
+            }
+            // Menambahkan baris data ke dalam tabel.
+            dataTable.appendChild(dataRow);
+          });
+
+          // Mengatur tampilan div "table-container" menjadi terlihat.
+          tableContainer.style.display = 'block';
+        } 
+      };
+
+      // Membuka permintaan HTTP GET untuk URL yang dimasukkan dan mengirimnya.
+      xhr.open('GET', urlInput, true);
+      xhr.send();
+    }
+  </script>
+</body>
+</html>

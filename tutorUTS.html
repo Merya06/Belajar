@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>table display</title>
+</head>
+<body>
+    <header>
+        <h1>Pengambil Tabel</h1>
+        <style>
+            h1 {color: aqua;}
+        </style>
+    </header>
+    <article>
+        <section>
+            <div>
+                <p>Masukkan Link</p>
+                <input type="text" id="url" placeholder="Masukkan URL" value="https://cors-anywhere.herokuapp.com/http://testingalpro.alwaysdata.net/api/getcoffee.php">
+                <br>
+                <button id="fetchButton" onclick="fetchData()">Ambil data</button>
+                <script src="main.js"></script> //src merupakan fungsi untuk mengambil source dari file lain sehingga kodingan bisa rapi
+                <div id="table-container">
+                    <table id="data-table"></table>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <p>Alpro II - Meri</p>
+        </footer>
+    </article>
+    
+</body>
+</html> 
