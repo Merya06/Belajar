@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UTS ALPRO2</title>
+  <style>
+    body {
+      font-family: 'garamond';
+      background-color:  #cabbf5;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    label {
+      font-size: 18px;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    #container {
+      text-align: center;
+      max-width: 1200px;
+      background-color: none;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    button {
+      font-family: 'garamond';
+      background-color: #6c839b;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #424950;
+    }
+
+    #table-container {
+      display: none;
+      margin-top: 20px;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 50px;
+      background-color: none;
+      border: 1px solid #cabbf5;
+      border-radius: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #000000;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #d8e3ac;
+    }
+  </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Table generator from URL</h1>
+        <label for="url">Insert URL:</label>
+        <input type="text" id="url" placeholder="URL" value="https://meriagustina06.alwaysdata.net/ALPRO_me/getcsv2json.php">
+        <br>
+        <button onclick="fetchData()">Load Data</button>
+        <button onclick="sortData()">Sort Data</button>
+
+        <div id="table-container">
+          <h2>Data from URL:</h2>
+          <table id="data-table">
+          </table>
+        </div>
+      </div>
+
+  <script>
+    function fetchData() {
+      const urlInput = document.getElementById('url').value;
+      const tableContainer = document.getElementById('table-container');
+      const dataTable = document.getElementById('data-table');
+
+      const xhr = new XMLHttpRequest();
+      
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+
+          dataTable.innerHTML = '';
+
+          const headerRow = document.createElement('tr');
+          for (const key in data[0]) {
+            if (data[0].hasOwnProperty(key)) {
+              const headerCell = document.createElement('th');
+              headerCell.textContent = key;
+              headerRow.appendChild(headerCell);
+            }
+          }
+          dataTable.appendChild(headerRow);
+
+          data.forEach(function(item) {
+            const dataRow = document.createElement('tr');
+            for (const key in item) {
+              if (item.hasOwnProperty(key)) {
+                const dataCell = document.createElement('td');
+                dataCell.textContent = item[key];
+                dataRow.appendChild(dataCell);
+              }
+            }
+            dataTable.appendChild(dataRow);
+          });
+
+          tableContainer.style.display = 'block';
+        } 
+      };
+
+      xhr.open('GET', urlInput, true);
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
